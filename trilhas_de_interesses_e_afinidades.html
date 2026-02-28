@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trilhas de Interesses e Afinidades - IFPI campus Floriano</title>
+  <style>
+  :root{
+    --bg: #eaf6df;
+    --bg2:#dff2cf;
+    --ink:#0f1b10;
+    --muted:#2f4a35;
+
+    --green:#7bd84a;
+    --green2:#9bf05f;
+    --greenDark:#2a7a2a;
+
+    --card:#ffffff;
+    --stroke: rgba(20,60,25,.22);
+
+    --shadow: 0 10px 30px rgba(0,0,0,.10);
+    --radius: 16px;
+
+    --btn:#a7f06a;
+    --btnInk:#123016;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 50% -10%, var(--bg2), transparent 60%),
+      linear-gradient(180deg, var(--bg), #f6fff0);
+    min-height:100vh;
+  }
+
+  .frame{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:18px;
+    opacity:.90;
+    position:relative;
+    overflow:hidden;
+  }
+  .frame:before, .frame:after{
+    content:"";
+    position:"";
+    top:0; bottom: 0;
+    width:80px;
+    opacity:.70;
+    pointer-events:none;
+    background-image:
+      radial-gradient(circle at 25% 10%, #1a6b1a 0 18px, transparent 19px),
+      radial-gradient(circle at 70% 18%, #63d63d 0 12px, transparent 13px),
+      radial-gradient(circle at 40% 35%, #0f5b0f 0 9px, transparent 10px),
+      radial-gradient(circle at 75% 45%, #3baf2a 0 16px, transparent 17px),
+      radial-gradient(circle at 35% 62%, #1a6b1a 0 14px, transparent 15px),
+      radial-gradient(circle at 70% 72%, #63d63d 0 10px, transparent 11px),
+      radial-gradient(circle at 45% 88%, #0f5b0f 0 12px, transparent 13px);
+    background-repeat:no-repeat;
+  }
+  .frame:before{left:0}
+  .frame:after{right:0; transform: scaleX(-1);}
+
+  .wrap{width:min(920px, 100%)}
+
+  .ribbon{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border-radius:999px;
+    background: linear-gradient(90deg, var(--green), var(--green2));
+    color:#0b220f;
+    font-weight:800;
+    letter-spacing:.3px;
+    box-shadow: 0 8px 16px rgba(0,0,0,.08);
+    border:1px solid rgba(0,0,0,.06);
+  }
+
+  header{margin:10px 0 14px}
+  h1{margin:10px 0 6px; font-size:1.25rem}
+  p{margin:0; color:var(--muted); line-height:1.35}
+
+  .progress{
+    height:10px;
+    background: rgba(42,122,42,.12);
+    border-radius:999px;
+    overflow:hidden;
+    border:1px solid rgba(42,122,42,.18);
+    margin-top:12px;
+  }
+  .bar{height:100%; width:0%; background: linear-gradient(90deg, var(--greenDark), var(--green2));}
+
+  .window{
+    padding:25px;
+    background:var(--card);
+    border:1px solid var(--stroke);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .windowTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 40px;
+    background: linear-gradient(180deg, #f7fff0, #e8f7db);
+    border-bottom:1px solid var(--stroke);
+  }
+  .dots{display:flex; gap:6px}
+  .dot{
+    width:10px; height:10px; border-radius:50%;
+    border:1px solid rgba(0,0,0,.12);
+    background:#cfe9c1;
+  }
+  .dot:nth-child(2){background:#bdebb0}
+  .dot:nth-child(3){background:#a6e59a}
+  .winTitle{font-weight:800; color:#1f4c24; font-size:.95rem}
+
+  .content{padding:2px 36px;}
+
+  .opt{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    padding:12px;
+    border-radius:14px;
+    border:1px solid rgba(20,60,25,.18);
+    background: #f8fff3;
+    margin:10px 0;
+    cursor:pointer;
+    transition: transform .05s ease, border-color .15s ease, background .15s ease;
+  }
+  .opt:hover{border-color: rgba(42,122,42,.35); background:#f2ffe9}
+  .opt:active{transform: scale(.995)}
+  input[type="radio"]{margin-top:2px}
+
+  .actions{
+    display:flex;
+    gap:10px;
+    justify-content:space-between;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  button{
+    border:1px solid rgba(20,60,25,.20);
+    border-radius:14px;
+    padding:10px 14px;
+    font-weight:800;
+    cursor:pointer;
+    background:#f7fff0;
+    color:#143b19;
+  }
+  button.primary{
+    background: linear-gradient(90deg, var(--btn), var(--green2));
+    color:var(--btnInk);
+    border-color: rgba(20,60,25,.10);
+  }
+  button.danger{
+    background:#fff0f0;
+    color:#5a1f1f;
+  }
+  button:disabled{opacity:.55; cursor:not-allowed}
+
+  .hint{margin-top:8px; color:#7a1f1f; display:none; font-weight:700}
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    padding:8px 10px;
+    border-radius:999px;
+    background: rgba(123,216,74,.18);
+    border:1px solid rgba(42,122,42,.20);
+    margin:6px 6px 0 0;
+    font-weight:800;
+    color:#1c4b22;
+  }
+
+  h3{
+    text-align: justify;
+  }
+
+  .list{margin:10px 0 0; padding-left:18px; color:var(--muted)}
+  .small{font-size:.92rem}
+</style>
+</head>
+
+<body>
+  <div class="frame">
+    <div class="wrap">
+      <header>
+        <div class="ribbon">Trilhas de Interesses e Afinidades — IFPI (Campus Floriano)</div>
+        <h1>Leia as situações e escolha a alternativa (A, B, C, D ou E) que melhor descreve você.</h1>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+      </header>
+      <main class="card" id="app"></main>
+    </div>
+
+    </div>
+
+  </div>
+</body>
+
+
+<script>
+/**
+ * 1) CONFIGURE AQUI
+ * Coloque suas perguntas no formato abaixo.
+ *
+ * - id: string única
+ * - text: enunciado
+ * - options: cada opção tem:
+ *   - label: texto exibido
+ *   - score: objeto { curso: pontos, ... }
+ *
+ * Cursos: "Edificacoes", "Administracao", "Eletromecanica", "MeioAmbiente", "Informatica"
+ */
+const QUESTIONS = [
+  {
+    id: "q1",
+    text: "Em um projeto de feira de ciências, qual tarefa você escolheria?",
+    options: [
+      { label: "A) Montar o circuito elétrico ou o motor de um protótipo.", score: { Eletromecanica: 1 } },
+      { label: "B) Desenhar a maquete estrutural e planejar o uso do espaço.", score: { Edificacoes: 1 } },
+      { label: "C) Coletar amostras de solo ou água para analisar a poluição.", score: { MeioAmbiente: 1 } },
+      { label: "D) Desenvolver o software, o site ou o jogo do projeto.", score: { Informatica: 1 } },
+      { label: "E) Cuidar do orçamento, da apresentação e da organização da equipe.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q2",
+    text: "O que mais te desperta curiosidade quando você caminha pela cidade de Floriano?",
+    options: [
+      { label: "A) Como funcionam as subestações de energia ou as máquinas pesadas.", score: { Eletromecanica: 1 } },
+      { label: "B) A estrutura das novas construções e o design dos edifícios.", score: { Edificacoes: 1 } },
+      { label: "C) Como o Rio Parnaíba é afetado pelo lixo e pelo esgoto da cidade.", score: { MeioAmbiente: 1 } },
+      { label: "D) Como os sistemas de bancos e lojas funcionam de forma conectada.", score: { Informatica: 1 } },
+      { label: "E) Como as grandes empresas da região gerenciam seus funcionários e lucros.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q3",
+    text: "Qual dessas matérias do Ensino Fundamental você tem mais facilidade ou interesse?",
+    options: [
+      { label: "A) Física (Eletricidade e Mecânica).", score: { Eletromecanica: 1 } },
+      { label: "B) Matemática (Geometria e Desenho).", score: { Edificacoes: 1 } },
+      { label: "C) Ciências e Biologia (Ecossistemas e Natureza).", score: { MeioAmbiente: 1 } },
+      { label: "D) Matemática (Lógica e Raciocínio Abstrato).", score: { Informatica: 1 } },
+      { label: "E) Português e História (Leitura, Escrita e Sociedade).", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q4",
+    text: "Se você pudesse resolver um problema do mundo hoje, qual seria?",
+    options: [
+      { label: "A) Criar máquinas que facilitem o trabalho humano pesado.", score: { Eletromecanica: 1 } },
+      { label: "B) Planejar cidades e moradias mais seguras e modernas.", score: { Edificacoes: 1 } },
+      { label: "C) Reverter o aquecimento global e proteger espécies em extinção.", score: { MeioAmbiente: 1 } },
+      { label: "D) Criar um aplicativo que conecte pessoas e facilite a vida digital.", score: { Informatica: 1 } },
+      { label: "E) Melhorar a gestão do dinheiro público e o funcionamento das empresas.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q5",
+    text: "Como você prefere passar seu tempo livre focado em algo produtivo?",
+    options: [
+      { label: "A) Consertando algum objeto quebrado ou mexendo em ferramentas.", score: { Eletromecanica: 1 } },
+      { label: "B) Fazendo desenhos detalhados ou montando estruturas (tipo minecraft ou The Sims).", score: { Edificacoes: 1 } },
+      { label: "C) Cuidando de plantas, animais ou lendo sobre a natureza.", score: { MeioAmbiente: 1 } },
+      { label: "D) Explorando novos programas, sites ou aprendendo códigos.", score: { Informatica: 1 } },
+      { label: "E) Organizando suas metas, finanças pessoais ou planejando eventos.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q6",
+    text: "Qual desses grupos de cursos superiores você vê possibilidades de estar cursando daqui a três anos?",
+    options: [
+      { label: "A) Engenharias de Automação e Indústria: Engenharia Elétrica, Mecatrônica, Mecânica, de Produção ou Metalúrgica.", score: { Eletromecanica: 1 } },
+      { label: "B) Construção, Arquitetura e Infraestrutura: Engenharia Civil, Arquitetura, Engenharia Ambiental, Cartográfica ou Sanitária.", score: { Edificacoes: 1 } },
+      { label: "C) Ciências da Natureza, Campo e Biologia: Gestão Ambiental, Ciências Ambientais, Agronomia, Engenharia Florestal ou Biologia.", score: { MeioAmbiente: 1 } },
+      { label: "D) Tecnologia da Informação e Computação: Ciência da Computação, Engenharia de Software, Sistemas de Informação ou Jogos Digitais.", score: { Informatica: 1 } },
+      { label: "E) Gestão de Negócios e Administração: Administração, Ciências Contábeis, Marketing, Logística ou Gestão Financeira.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q7",
+    text: "Qual desses cenários de trabalho mais lhe agrada?",
+    options: [
+      { label: "A) Fábricas e oficinas: operando máquinas, consertando motores e cuidando de sistemas elétricos.", score: { Eletromecanica: 1 } },
+      { label: "B) Canteiros de obras e escritórios de arquitetura: planejando prédios, medindo terrenos e acompanhando construções.", score: { Edificacoes: 1 } },
+      { label: "C) Ar livre e laboratórios: analisando a qualidade da água e do solo ou fiscalizando áreas de preservação.", score: { MeioAmbiente: 1 } },
+      { label: "D) Escritórios de tecnologia e home office: escrevendo códigos, criando sites e resolvendo problemas digitais.", score: { Informatica: 1 } },
+      { label: "E) Empresas e escritórios de negócios: organizando finanças, liderando equipes e criando estratégias de venda.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q8",
+    text: "Dentre as 5 opções de aulas práticas, qual delas desperta mais seu interesse?",
+    options: [
+      { label: "A) Oficina de Precisão e Mecânica: aprender a usar instrumentos de medida ultraprecisos (como micrômetros), operar serras elétricas e fazer roscas e furos perfeitos em peças de metal. (Baseado em: Metrologia e Ajustagem – Eletromecânica)", score: { Eletromecanica: 1 } },
+      { label: "B) Desenho de Projetos e Plantas: aprender as normas para desenhar casas e prédios, usando instrumentos de desenho e softwares de computador (CAD) para criar visões em 3D. (Baseado em: Desenho Técnico – Edificações)", score: { Edificacoes: 1 } },
+      { label: "C) Mapeamento e Satélites: aprender a ler mapas digitais, usar sistemas de GPS e entender como as imagens de satélite ajudam a monitorar o que acontece na superfície da Terra. (Baseado em: Geotecnologias Aplicadas – Meio Ambiente)", score: { MeioAmbiente: 1 } },
+      { label: "D) Lógica e Criação de Programas: aprender como o computador “pensa”, criando algoritmos, sites e aplicativos usando códigos, fluxogramas e estruturas de dados. (Baseado em: Algoritmos e Lógica – Informática)", score: { Informatica: 1 } },
+      { label: "E) Comportamento, Vendas e Marketing: aprender como as empresas contratam pessoas, como criar estratégias de venda e como funciona o marketing digital para conquistar clientes. (Baseado em: Gestão de Pessoas e Marketing – Administração)", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q9",
+    text: "Ao realizar um trabalho, qual desses resultados finais traria mais satisfação para você?",
+    options: [
+      { label: "A) Ver uma máquina ou robô funcionando perfeitamente: sentir que você dominou a técnica para montar, consertar ou automatizar um equipamento complexo.", score: { Eletromecanica: 1 } },
+      { label: "B) Ver um prédio ou uma reforma sair do papel: sentir orgulho ao ver uma construção segura e bem planejada que você ajudou a projetar ou construir.", score: { Edificacoes: 1 } },
+      { label: "C) Ver um ecossistema sendo recuperado ou protegido: sentir que sua análise e fiscalização ajudaram a salvar um rio, uma floresta ou a reduzir a poluição.", score: { MeioAmbiente: 1 } },
+      { label: "D) Ver um sistema, site ou app sendo usado por milhares de pessoas: sentir que sua lógica e seus códigos criaram uma solução digital útil e inovadora.", score: { Informatica: 1 } },
+      { label: "E) Ver uma empresa crescer e sua equipe motivada: sentir que sua organização financeira e estratégias de marketing fizeram um negócio ter sucesso.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q10",
+    text: "Imagine um desafio, um problema a ser resolvido. Qual reação você escolheria para encontrar a solução?",
+    options: [
+      { label: "A) Colocar a mão na massa e usar ferramentas: prefiro abrir, desmontar ou ajustar as peças físicas até entender como consertar o que parou de funcionar.", score: { Eletromecanica: 1 } },
+      { label: "B) Analisar o espaço e buscar uma solução visual: prefiro fazer um esboço, medir as possibilidades e reorganizar a estrutura para que tudo fique seguro e no lugar certo.", score: { Edificacoes: 1 } },
+      { label: "C) Investigar as causas e os impactos ao redor: prefiro observar o ambiente, coletar informações e buscar uma solução que não prejudique o que está em volta.", score: { MeioAmbiente: 1 } },
+      { label: "D) Usar a lógica e criar uma solução digital: prefiro me sentar à frente do computador e desenvolver um código, um comando ou uma automação que resolva o problema.", score: { Informatica: 1 } },
+      { label: "E) Conversar, negociar e organizar a equipe: prefiro reunir as pessoas envolvidas, gerenciar os recursos disponíveis e liderar o plano de ação para resolver o desafio.", score: { Administracao: 1 } },
+    ],
+  },
+  {
+    id: "q11",
+    text: "No Ensino Médio Integrado, qual destas áreas de estudo você acha que será a sua favorita e/ou terá mais facilidade?",
+    options: [
+      { label: "A) Matemática aplicada e Física (Cálculos e Movimento): você gosta de entender as leis da física e usar a matemática para calcular forças, potência e o funcionamento de máquinas.", score: { Eletromecanica: 1 } },
+      { label: "B) Matemática espacial e Geometria (Formas e Medidas): você tem facilidade em visualizar figuras geométricas, calcular áreas e usar o raciocínio lógico para desenhar e projetar estruturas.", score: { Edificacoes: 1 } },
+      { label: "C) Ciências da Natureza e Biologia (Ecossistemas e Vida): você prefere estudar os seres vivos, os ciclos da natureza e como a química e a biologia explicam o mundo natural.", score: { MeioAmbiente: 1 } },
+      { label: "D) Linguagens e Lógica Matemática (Códigos e Raciocínio): você gosta de estruturar o pensamento, aprender novas linguagens (mesmo que sejam de programação) e resolver desafios lógicos complexos.", score: { Informatica: 1 } },
+      { label: "E) Ciências Humanas e Linguagens (Sociedade e Comunicação): você se interessa por história, sociologia e pela forma como as pessoas se organizam, se comunicam e consomem na sociedade.", score: { Administracao: 1 } },
+    ],
+  },
+];
+
+// Textos extras (opcional): aparecem junto do resultado
+const COURSE_INFO = {
+  Edificacoes: {
+    name: "Edificações",
+    bullets: [
+      "Projetos, desenho técnico e noções de construção",
+      "Medições, materiais e planejamento de obras",
+    ],
+  },
+  Administracao: {
+    name: "Administração",
+    bullets: [
+      "Organização, planejamento e rotinas de gestão",
+      "Finanças básicas, processos e atendimento",
+    ],
+  },
+  Eletromecanica: {
+    name: "Eletromecânica",
+    bullets: [
+      "Motores, máquinas, manutenção e sistemas elétricos",
+      "Raciocínio lógico e prática com equipamentos",
+    ],
+  },
+  MeioAmbiente: {
+    name: "Meio Ambiente",
+    bullets: [
+      "Sustentabilidade, resíduos, água e impacto ambiental",
+      "Coleta/análise de dados e práticas de conservação",
+    ],
+  },
+  Informatica: {
+    name: "Informática",
+    bullets: [
+      "Programação, redes, sistemas e solução de problemas",
+      "Criação de projetos digitais e tecnologia no dia a dia",
+    ],
+  },
+};
+
+/* 2) LÓGICA DO TESTE (não precisa mexer) */
+
+const COURSES = ["Edificacoes","Administracao","Eletromecanica","MeioAmbiente","Informatica"];
+
+let step = 0;
+const answers = new Map(); // qid -> optionIndex
+
+function baseScores(){
+  const s = {};
+  for (const c of COURSES) s[c] = 0;
+  return s;
+}
+
+function computeScores(){
+  const scores = baseScores();
+  for (const q of QUESTIONS){
+    const idx = answers.get(q.id);
+    if (idx == null) continue;
+    const opt = q.options[idx];
+    for (const [course, pts] of Object.entries(opt.score || {})){
+      if (scores[course] == null) scores[course] = 0;
+      scores[course] += Number(pts) || 0;
+    }
+  }
+  return scores;
+}
+
+function ranking(scores){
+  const arr = Object.entries(scores).map(([course, pts]) => ({ course, pts }));
+  arr.sort((a,b)=> b.pts - a.pts);
+  return arr;
+}
+
+function setProgress(){
+  const done = answers.size;
+  const total = QUESTIONS.length;
+  const pct = total === 0 ? 0 : Math.round((done/total)*100);
+  document.getElementById("bar").style.width = pct + "%";
+}
+
+function el(tag, attrs={}, ...children){
+  const n = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)){
+    if (k === "class") n.className = v;
+    else if (k.startsWith("on") && typeof v === "function") n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  }
+  for (const ch of children){
+    if (ch == null) continue;
+    n.appendChild(typeof ch === "string" ? document.createTextNode(ch) : ch);
+  }
+  return n;
+}
+
+function render(){
+  setProgress();
+  const app = document.getElementById("app");
+  app.innerHTML = "";
+
+  app.classList.add("window"); // garante o estilo
+  app.appendChild(el("div", { class:"windowTop" },
+    el("div", { class:"dots" },
+      el("span", { class:"dot" }),
+      el("span", { class:"dot" }),
+      el("span", { class:"dot" }),
+    ),
+    el("div", { class:"winTitle" }, "Questionário")
+  ));
+
+  const body = el("div", { class:"content" });
+  app.appendChild(body);
+
+  if (QUESTIONS.length === 0){
+    app.appendChild(el("p", {class:"muted"}, "Nenhuma pergunta configurada ainda. Preencha o array QUESTIONS no código."));
+    return;
+  }
+
+  if (step >= QUESTIONS.length){
+    renderResult(app);
+    return;
+  }
+
+  const q = QUESTIONS[step];
+  const selected = answers.get(q.id);
+
+  app.appendChild(el("div", {class:"row"},
+    el("div", {class:"col muted small"},
+      el("h3", {}, "Cursos avaliados:"),
+      el("div", {},
+        el("span", {class:"pill"}, "Administração"),
+        el("span", {class:"pill"}, "Edificações"),
+        el("span", {class:"pill"}, "Eletromecânica"),
+        el("span", {class:"pill"}, "Meio Ambiente"),
+        el("span", {class:"pill"}, "Informática"),
+      ),
+    el("div", {class:"col"},
+      el("h2", {class:"qtitle"}, `Pergunta ${step+1} de ${QUESTIONS.length}`),
+      el("h1", {class:"muted"}, q.text),
+    ),
+    
+      el("p", {style:"margin-top:10px"},
+        "Atalho (PC): ",
+        el("span", {class:"kbd"}, "Enter"),
+        " para avançar."
+      )
+    )
+  ));
+
+  const form = el("div", {});
+  const hint = el("div", {class:"hint", id:"hint"}, "Escolha uma opção para continuar.");
+
+  q.options.forEach((opt, i) => {
+    const id = `${q.id}_opt_${i}`;
+    const radio = el("input", { type:"radio", name:q.id, id, value:String(i) });
+    if (selected === i) radio.checked = true;
+
+    const label = el("label", { class:"opt", for:id },
+      radio,
+      el("div", {},
+        el("div", {}, opt.label),
+        opt.help ? el("div", {class:"muted small", style:"margin-top:4px"}, opt.help) : null
+      )
+    );
+
+    label.addEventListener("click", () => {
+      answers.set(q.id, i);
+      hint.style.display = "none";
+      setProgress();
+    });
+
+    form.appendChild(label);
+  });
+
+  app.appendChild(form);
+  app.appendChild(hint);
+
+  const btnPrev = el("button", {
+    onclick: () => { step = Math.max(0, step-1); render(); },
+    disabled: step === 0
+  }, "Voltar");
+
+  const btnReset = el("button", {
+    class:"danger",
+    onclick: () => {
+      answers.clear(); step = 0; render();
+    }
+  }, "Reiniciar");
+
+  const btnNext = el("button", {
+    class:"primary",
+    onclick: () => {
+      if (!answers.has(q.id)){
+        hint.style.display = "block";
+        return;
+      }
+      step = Math.min(QUESTIONS.length, step+1);
+      render();
+    }
+  }, step === QUESTIONS.length-1 ? "Ver resultado" : "Próxima");
+
+  app.appendChild(el("div", {class:"actions"}, el("div", {}, btnPrev, " ", btnReset), el("div", {}, btnNext)));
+
+  // Enter para avançar no PC
+  window.onkeydown = (e) => {
+    if (e.key === "Enter"){
+      e.preventDefault();
+      btnNext.click();
+    }
+  };
+}
+
+function renderResult(app){
+  const scores = computeScores();
+  const rank = ranking(scores);
+  const top = rank[0];
+  const second = rank[1];
+
+  const topName = COURSE_INFO[top.course]?.name || top.course;
+  const secondName = COURSE_INFO[second.course]?.name || second.course;
+
+  app.classList.add("result");
+  app.appendChild(el("h2", {}, "Resultado do teste"));
+
+  app.appendChild(el("h3", {}, "Atenção: O objetivo desta atividade é ajudá-lo a refletir sobre seus interesses e afinidades; não se trata de um teste definitivo. Use o resultado como um guia para explorar os cursos, conversar com professores e alunos, e descobrir o que lhe traz motivação. O mais importante é escolher um caminho que o faça feliz e realizado!"));
+  
+  app.appendChild(el("p", {class:"muted"},
+    `Com base nas suas respostas, o curso mais indicado é: `
+  ));
+  app.appendChild(el("div", {style:"margin:10px 0 4px"},
+    el("span", {class:"pill", style:"font-size:1.05rem"}, `✅ ${topName}`)
+  ));
+
+  // Mostra top 3
+  const top3 = rank.slice(0,3).filter(x=>x.pts>0 || rank.length<=3);
+  const top3Line = el("p", {class:"muted", style:"margin-top:10px"},
+    "Outras possibilidades próximas: "
+  );
+  app.appendChild(top3Line);
+  app.appendChild(el("div", {},
+    ...top3.map((x, idx) => {
+      const n = COURSE_INFO[x.course]?.name || x.course;
+      const label = idx === 0 ? `1º ${n}` : `${idx+1}º ${n}`;
+      return el("span", {class:"pill"}, label);
+    })
+  ));
+
+  // Explicação rápida (personalizável)
+  const info = COURSE_INFO[top.course];
+  if (info?.bullets?.length){
+    app.appendChild(el("p", {class:"muted", style:"margin-top:12px"}, "Por que esse curso combina com você:"));
+    const ul = el("ul", {class:"list"});
+    info.bullets.forEach(b => ul.appendChild(el("li", {}, b)));
+    app.appendChild(ul);
+  }
+
+  // Transparência: exibir pontuação
+  app.appendChild(el("p", {class:"muted small", style:"margin-top:12px"},
+    "Pontuação (para transparência):"
+  ));
+  const ul2 = el("ul", {class:"list small"});
+  rank.forEach(x => {
+    const n = COURSE_INFO[x.course]?.name || x.course;
+    ul2.appendChild(el("li", {}, `${n}: ${x.pts} ponto(s)`));
+  });
+  app.appendChild(ul2);
+
+  const btnBack = el("button", { onclick: () => { step = QUESTIONS.length-1; render(); } }, "Voltar e revisar");
+  const btnRestart = el("button", { class:"danger", onclick: () => { answers.clear(); step = 0; render(); } }, "Fazer novamente");
+
+  app.appendChild(el("div", {class:"actions"}, el("div", {}, btnBack), el("div", {}, btnRestart)));
+
+  window.onkeydown = null;
+}
+
+render();
+</script>
+</body>
+</html>
