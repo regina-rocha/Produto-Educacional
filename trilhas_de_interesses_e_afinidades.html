@@ -479,13 +479,7 @@ function render(){
     el("div", {class:"col"},
       el("h2", {class:"qtitle"}, `Pergunta ${step+1} de ${QUESTIONS.length}`),
       el("h1", {class:"muted"}, q.text),
-    ),
-    
-      el("p", {style:"margin-top:10px"},
-        "Atalho (PC): ",
-        el("span", {class:"kbd"}, "Enter"),
-        " para avançar."
-      )
+    )
     )
   ));
 
